@@ -1,7 +1,21 @@
 import React from 'react';
-import {FlatList, Text, View} from 'react-native';
+import {FlatList, Text, View,Image, StyleSheet} from 'react-native';
 import {openDatabase} from 'react-native-sqlite-storage';
 var db = openDatabase({ name: 'symbosis.db' }); 
+
+const styles = StyleSheet.create({
+  container: {
+    paddingTop: 50,
+  },
+  tinyLogo: {
+    width: 50,
+    height: 50,
+  },
+  logo: {
+    width: 66,
+    height: 58,
+  },
+});
 export default class ViewAllPlants extends React.Component {
   constructor(props) {
     super(props);
@@ -40,6 +54,12 @@ export default class ViewAllPlants extends React.Component {
               <Text>description: {item.description}</Text>
               <Text>Light: {item.light}</Text>
               <Text>Soil: {item.soil}</Text>
+              <Text>Watering: {item.watering}</Text>
+              <Text>maximum_production: {item.maximum_production}</Text>
+              <Text>symbioses: {item.symbioses}</Text>
+              <Image style={styles.tinyLogo}
+        source={{uri:item.image}}
+      />
             </View>
           )}
         />

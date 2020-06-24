@@ -1,4 +1,5 @@
 import React from 'react';
+//import props from 'prop-types';
 import {View} from 'react-native';
 import Mybutton from './components/Mybutton';
 import Mytext from './components/Mytext';

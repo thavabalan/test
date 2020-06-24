@@ -1,5 +1,5 @@
 /*Example of Pre-Populated SQLite Database in React Native*/
-import React from 'react';
+//import React from 'react';
 
 //Import react-navigation
 import {createAppContainer} from 'react-navigation';

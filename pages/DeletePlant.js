@@ -1,18 +1,33 @@
 /*Screen to delete the user*/
 import React from 'react';
-import { Button, Text, View, Alert } from 'react-native';
+import { Button, Text, View,Image, Alert,StyleSheet } from 'react-native';
 import Mytextinput from './components/Mtextinput';
 import Mybutton from './components/Mybutton';
 import { openDatabase } from 'react-native-sqlite-storage';
 var db = openDatabase({ name: 'symbosis.db' });
-export default class UpdateUser extends React.Component {
+
+const styles = StyleSheet.create({
+  container: {
+    paddingTop: 50,
+  },
+  tinyLogo: {
+    width: 50,
+    height: 50,
+  },
+  logo: {
+    width: 66,
+    height: 58,
+  },
+});
+export default class DeletePlant extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       input_plant_id: '',
+      userData: '',
     };
   }
-  deleteUser = () => {
+  deletePlant = () => {
     var that = this;
     const { input_plant_id } = this.state;
     db.transaction(tx => {
@@ -40,6 +55,30 @@ export default class UpdateUser extends React.Component {
       );
     });
   };
+  searchPlant = () => {
+    const { input_plant_id } = this.state;
+    console.log(this.state.input_plant_id);
+    db.transaction(tx => {
+      tx.executeSql(
+        'SELECT * FROM plants where name = ?',
+        [input_plant_id],
+        (tx, results) => {
+          var len = results.rows.length;
+          console.log('len', len);
+          if (len > 0) {
+            this.setState({
+              userData: results.rows.item(0),
+            });
+          } else {
+            alert('No plant found');
+            this.setState({
+              userData: '',
+            });
+          }
+        }
+      );
+    });
+  };
   render() {
     return (
       <View style={{ backgroundColor: 'white', flex: 1 }}>
@@ -49,8 +88,21 @@ export default class UpdateUser extends React.Component {
           style={{ padding:10 }}
         />
         <Mybutton
-          title="Delete User"
-          customClick={this.deleteUser.bind(this)}
+          title="Search Plant"
+          customClick={this.searchPlant.bind(this)}
+        />
+        <View style={{ marginLeft: 35, marginRight: 35, marginTop: 10 }}>
+          <Text>Name: {this.state.userData.name}</Text>
+          <Text>description: {this.state.userData.description}</Text>
+          <Text>Light Level: {this.state.userData.light}</Text>
+          <Text>Soil Level: {this.state.userData.soil}</Text>
+          <Image style={styles.tinyLogo}
+        source={{uri:this.state.userData.image}}
+      />
+        </View>
+        <Mybutton
+          title="Delete Plant"
+          customClick={this.deletePlant.bind(this)}
         />
       </View>
     );

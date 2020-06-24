@@ -1,9 +1,10 @@
 import React from 'react';
-import {View, ScrollView, KeyboardAvoidingView, Alert,Image,Button} from 'react-native';
+import {View, ScrollView, KeyboardAvoidingView, Alert,Image,Button,TouchableOpacity} from 'react-native';
 import Mytextinput from './components/Mtextinput';
 import Mybutton from './components/Mybutton';
+import ImagePicker from 'react-native-image-picker';
+
 import {openDatabase} from 'react-native-sqlite-storage';
-import ImagePicker from 'react-native-image-picker'
 var db = openDatabase({name: 'symbosis.db'});
 export default class RegisterPlant extends React.Component {
   constructor(props) {
@@ -15,10 +16,10 @@ export default class RegisterPlant extends React.Component {
       soil: '',
       watering: '',
       image: '',
-      photo: null,
+      //photo: null,
       maximum_production: '',
       symbioses: '',
-      avatarSource:'',
+      
     };
   }
   register_plant = () => {
@@ -87,16 +88,32 @@ export default class RegisterPlant extends React.Component {
       alert('Please fill Name');
     }
   };
-  handleChoosePhoto = () => {
+  image_t = () => {
     const options = {
       noData: true,
     }
-    ImagePicker.launchImageLibrary(options, response => {
-      if (response.uri) {
-        this.setState({ photo: response })
-      }
-    })
-  }
+  ImagePicker.showImagePicker(options, (response) => {
+    console.log('Response = ', response);
+   
+    if (response.didCancel) {
+      console.log('User cancelled image picker');
+    } else if (response.error) {
+      console.log('ImagePicker Error: ', response.error);
+    } else if (response.customButton) {
+      console.log('User tapped custom button: ', response.customButton);
+    } else {
+      const source = 'file://' + response.path;
+      this.setState({
+        image: source,
+      });
+      console.log(response.fileName)
+   
+      // You can also display the image using data:
+      // const source = { uri: 'data:image/jpeg;base64,' + response.data };
+   
+     
+    }
+  })};
  
   render() {
    
@@ -143,13 +160,12 @@ export default class RegisterPlant extends React.Component {
               style={{textAlignVertical: 'top', padding: 10}}
             />
 
-{this.state.photo && (
-          <Image
-            source={{ uri: photo.uri }}
-            style={{ width: 300, height: 300 }}
-          />
-        )}
-        <Button title="Choose Photo" onPress={this.handleChoosePhoto} />
+        <Button title="Choose Photo" onPress={this.image_t} 
+        maxLength={225}
+        numberOfLines={5}
+        multiline={true}
+          style={{textAlignVertical: 'top', padding: 10}}
+        />
 
             <Mytextinput
               placeholder="maximum_production"

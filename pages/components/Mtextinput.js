@@ -1,5 +1,6 @@
 /*Custom TextInput*/
 import React from 'react';
+//import props from 'prop-types';
 import {View, TextInput} from 'react-native';
 const Mytextinput = props => {
   return (

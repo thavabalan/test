@@ -1,5 +1,6 @@
 /*Custom Button*/
 import React from 'react';
+//import props from'prop-types';
 import {TouchableOpacity, Text, StyleSheet} from 'react-native';
 const Mybutton = props => {
   return (

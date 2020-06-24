@@ -1,9 +1,22 @@
 import React from 'react';
-import { Text, View, Button } from 'react-native';
+import { Text, View, Button,Image,StyleSheet } from 'react-native';
 import Mytextinput from './components/Mtextinput';
 import Mybutton from './components/Mybutton';
 import { openDatabase } from 'react-native-sqlite-storage';
 var db = openDatabase({ name: 'symbosis.db' }); 
+const styles = StyleSheet.create({
+  container: {
+    paddingTop: 50,
+  },
+  tinyLogo: {
+    width: 50,
+    height: 50,
+  },
+  logo: {
+    width: 66,
+    height: 58,
+  },
+});
 export default class ViewPlant extends React.Component {
   constructor(props) {
     super(props);
@@ -12,7 +25,8 @@ export default class ViewPlant extends React.Component {
       userData: '',
     };
   }
-  searchUser = () => {
+  
+  searchPlant = () => {
     const { input_user_id } = this.state;
     console.log(this.state.input_user_id);
     db.transaction(tx => {
@@ -27,7 +41,7 @@ export default class ViewPlant extends React.Component {
               userData: results.rows.item(0),
             });
           } else {
-            alert('No user found');
+            alert('No plant found');
             this.setState({
               userData: '',
             });
@@ -46,13 +60,16 @@ export default class ViewPlant extends React.Component {
         />
         <Mybutton
           title="Search Plant"
-          customClick={this.searchUser.bind(this)}
+          customClick={this.searchPlant.bind(this)}
         />
         <View style={{ marginLeft: 35, marginRight: 35, marginTop: 10 }}>
           <Text>Name: {this.state.userData.name}</Text>
           <Text>description: {this.state.userData.description}</Text>
           <Text>Light Level: {this.state.userData.light}</Text>
           <Text>Soil Level: {this.state.userData.soil}</Text>
+          <Image style={styles.tinyLogo}
+        source={{uri:this.state.userData.image}}
+      />
         </View>
       </View>
     );
